@@ -57,9 +57,15 @@ public class Homework {
 
 
             try (Session session = sessionFactory.openSession()) {
+                Student student = session.find(Student.class, 1);
+                System.out.println("Before change" + student.toString());
                 firstStudent.setSecondName("Adams");
                 Transaction transaction1 = session.beginTransaction();
+                student = session.find(Student.class, 1);
+                System.out.println("Before merge" + student.toString());
                 session.merge(firstStudent);
+                student = session.find(Student.class, 1);
+                System.out.println("Before commit" + student.toString());
                 transaction1.commit();
             }
 
