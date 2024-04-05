@@ -12,42 +12,41 @@ import java.util.stream.Collectors;
 public class Server {
     public static final int PORT = 8000;
 
-
     public static void main(String[] args) {
         final Map<String, ClientHandler> clients = new HashMap<>();
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            System.out.println("Сервер запущен на порту: " + PORT);
+            System.out.println("Г‘ГҐГ°ГўГҐГ° Г§Г ГЇГіГ№ГҐГ­ Г­Г  ГЇГ®Г°ГІГі: " + PORT);
             while (true) {
                 try {
                     Socket clientSocket = serverSocket.accept();
-                    System.out.println("Подключился новый клиент: " + clientSocket.toString());
+                    System.out.println("ГЏГ®Г¤ГЄГ«ГѕГ·ГЁГ«Г±Гї Г­Г®ГўГ»Г© ГЄГ«ГЁГҐГ­ГІ: " + clientSocket.toString());
 
                     PrintWriter clientOut = new PrintWriter(clientSocket.getOutputStream(), true);
-                    clientOut.println("Подключение успешно. Введите идентификатор");
+                    clientOut.println("ГЏГ®Г¤ГЄГ«ГѕГ·ГҐГ­ГЁГҐ ГіГ±ГЇГҐГёГ­Г®. Г‚ГўГҐГ¤ГЁГІГҐ ГЁГ¤ГҐГ­ГІГЁГґГЁГЄГ ГІГ®Г°");
 
                     Scanner clientIn = new Scanner(clientSocket.getInputStream());
                     String clientId = clientIn.nextLine();
-                    System.out.println("Идентификатор клиента " + clientSocket + ": " + clientId);
+                    System.out.println("Г€Г¤ГҐГ­ГІГЁГґГЁГЄГ ГІГ®Г° ГЄГ«ГЁГҐГ­ГІГ  " + clientSocket + ": " + clientId);
 
                     String allClients = clients.entrySet().stream()
                             .map(it -> "id = " + it.getKey() + ", client = " + it.getValue().getClientSocket())
                             .collect(Collectors.joining("\n"));
-                    clientOut.println("Список доступных клиентов: \n" + allClients);
+                    clientOut.println("Г‘ГЇГЁГ±Г®ГЄ Г¤Г®Г±ГІГіГЇГ­Г»Гµ ГЄГ«ГЁГҐГ­ГІГ®Гў: \n" + allClients);
 
                     ClientHandler clientHandler = new ClientHandler(clientSocket, clients);
                     new Thread(clientHandler).start();
 
                     for (ClientHandler client : clients.values()) {
-                        client.send("Подключился новый клиент: " + clientSocket + ", id = " + clientId);
+                        client.send("ГЏГ®Г¤ГЄГ«ГѕГ·ГЁГ«Г±Гї Г­Г®ГўГ»Г© ГЄГ«ГЁГҐГ­ГІ: " + clientSocket + ", id = " + clientId);
                     }
                     clients.put(clientId, clientHandler);
                 } catch (IOException e) {
-                    System.err.println("Произошла ошибка при взаимоействии с клиентом" + e.getMessage());
+                    System.err.println("ГЏГ°Г®ГЁГ§Г®ГёГ«Г  Г®ГёГЁГЎГЄГ  ГЇГ°ГЁ ГўГ§Г ГЁГ¬Г®ГҐГ©Г±ГІГўГЁГЁ Г± ГЄГ«ГЁГҐГ­ГІГ®Г¬" + e.getMessage());
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException("Не удалось прослушать порт" + PORT, e);
+            throw new RuntimeException("ГЌГҐ ГіГ¤Г Г«Г®Г±Гј ГЇГ°Г®Г±Г«ГіГёГ ГІГј ГЇГ®Г°ГІ" + PORT, e);
         }
     }
 }
@@ -72,15 +71,15 @@ class ClientHandler implements Runnable {
     public void run() {
         try (Scanner input = new Scanner(clientSocket.getInputStream()))
               {
-           // output.println("Подключение прошло успешно");
+           // output.println("ГЏГ®Г¤ГЄГ«ГѕГ·ГҐГ­ГЁГҐ ГЇГ°Г®ГёГ«Г® ГіГ±ГЇГҐГёГ­Г®");
 
             while (true) {
                 if (clientSocket.isClosed()) {
-                    System.out.println("Клиент " + clientSocket + " отключился");
+                    System.out.println("ГЉГ«ГЁГҐГ­ГІ " + clientSocket + " Г®ГІГЄГ«ГѕГ·ГЁГ«Г±Гї");
                     break;
                 }
                 String inputFromClient = input.nextLine();
-                System.out.println("Получено сообщение от клиента " + clientSocket + ": " + inputFromClient);
+                System.out.println("ГЏГ®Г«ГіГ·ГҐГ­Г® Г±Г®Г®ГЎГ№ГҐГ­ГЁГҐ Г®ГІ ГЄГ«ГЁГҐГ­ГІГ  " + clientSocket + ": " + inputFromClient);
 
                 String toClientId = null;
                 if (inputFromClient.startsWith("@")){
@@ -98,22 +97,22 @@ class ClientHandler implements Runnable {
                     if (toClient != null) {
                         toClient.send(inputFromClient.replace("@" + toClientId + " ", ""));
                     } else {
-                        System.out.println("Не найден клиент с идентификатором: " + toClientId);
+                        System.out.println("ГЌГҐ Г­Г Г©Г¤ГҐГ­ ГЄГ«ГЁГҐГ­ГІ Г± ГЁГ¤ГҐГ­ГІГЁГґГЁГЄГ ГІГ®Г°Г®Г¬: " + toClientId);
                     }
                 }
 
                 if (Objects.equals("exit", inputFromClient)) {
-                    System.out.println("Клиент отключился");
+                    System.out.println("ГЉГ«ГЁГҐГ­ГІ Г®ГІГЄГ«ГѕГ·ГЁГ«Г±Гї");
                     break;
                 }
             }
         } catch (IOException e) {
-            System.out.println("Произошла ошибка при взаимоействии с клиентом" + clientSocket + ": " + e.getMessage());
+            System.out.println("ГЏГ°Г®ГЁГ§Г®ГёГ«Г  Г®ГёГЁГЎГЄГ  ГЇГ°ГЁ ГўГ§Г ГЁГ¬Г®ГҐГ©Г±ГІГўГЁГЁ Г± ГЄГ«ГЁГҐГ­ГІГ®Г¬" + clientSocket + ": " + e.getMessage());
         }
         try {
             clientSocket.close();
         } catch (IOException e) {
-            System.err.println("Ошибка при отключении клиента " + clientSocket + ": " + e.getMessage());
+            System.err.println("ГЋГёГЁГЎГЄГ  ГЇГ°ГЁ Г®ГІГЄГ«ГѕГ·ГҐГ­ГЁГЁ ГЄГ«ГЁГҐГ­ГІГ  " + clientSocket + ": " + e.getMessage());
         }
     }
 
