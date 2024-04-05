@@ -1,4 +1,4 @@
-package ru.gb.lesson5.server;
+package lesson5.server;
 
 import java.io.IOException;
 import java.io.PrintWriter;

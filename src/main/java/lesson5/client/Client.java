@@ -1,10 +1,8 @@
-package ru.gb.lesson5.client;
+package lesson5.client;
 
-import ru.gb.lesson5.server.Server;
+import lesson5.server.Server;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Objects;
