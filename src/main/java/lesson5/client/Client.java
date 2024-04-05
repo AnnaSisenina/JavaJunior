@@ -14,18 +14,16 @@ public class Client {
     public static void main(String[] args) {
         try {
             Socket serverSocket = new Socket("localhost", Server.PORT);
-            System.out.println("Подключились к серверу: tcp://localhost: " + Server.PORT);
-
+            System.out.println("ГЏГ®Г¤ГЄГ«ГѕГ·ГЁГ«ГЁГ±Гј ГЄ Г±ГҐГ°ГўГҐГ°Гі: tcp://localhost: " + Server.PORT);
             Scanner serverIn = new Scanner(serverSocket.getInputStream());
             String input = serverIn.nextLine();
-            System.out.println("Сообщение от сервера: " + input);
-
+            System.out.println("Г‘Г®Г®ГЎГ№ГҐГ­ГЁГҐ Г®ГІ Г±ГҐГ°ГўГҐГ°Г : " + input);
             new PrintWriter(serverSocket.getOutputStream(), true).println(UUID.randomUUID());
 
             new Thread(new ServerReader(serverSocket)).start();
             new Thread(new ServerWriter(serverSocket)).start();
         } catch (IOException e) {
-            throw new RuntimeException("Не удалось подключить к серверу: " + e.getMessage(), e);
+            throw new RuntimeException("ГЌГҐ ГіГ¤Г Г«Г®Г±Гј ГЇГ®Г¤ГЄГ«ГѕГ·ГЁГІГј ГЄ Г±ГҐГ°ГўГҐГ°Гі: " + e.getMessage(), e);
         }
     }
 }
@@ -46,18 +44,18 @@ class ServerWriter implements Runnable {
                 out.println(msgFromConsole);
 
                 if (Objects.equals("exit", msgFromConsole)) {
-                    System.out.println("Отключаемся...");
+                    System.out.println("ГЋГІГЄГ«ГѕГ·Г ГҐГ¬Г±Гї...");
                     break;
                 }
             }
         } catch (IOException e) {
-            System.err.println("Ошибка при отправке на сервер: " + e.getMessage());
+            System.err.println("ГЋГёГЁГЎГЄГ  ГЇГ°ГЁ Г®ГІГЇГ°Г ГўГЄГҐ Г­Г  Г±ГҐГ°ГўГҐГ°: " + e.getMessage());
         }
 
         try {
             serverSocket.close();
         } catch (IOException e) {
-            System.err.println("Ощибка при отключении от сервера " + e.getMessage());
+            System.err.println("ГЋГ№ГЁГЎГЄГ  ГЇГ°ГЁ Г®ГІГЄГ«ГѕГ·ГҐГ­ГЁГЁ Г®ГІ Г±ГҐГ°ГўГҐГ°Г  " + e.getMessage());
         }
     }
 }
@@ -74,16 +72,16 @@ class ServerReader implements Runnable {
         try (Scanner scannerIn = new Scanner(serverSocket.getInputStream())) {
             while (scannerIn.hasNext()) {
                 String inputFromServer = scannerIn.nextLine();
-                System.out.println("Сообщение от сервера: " + inputFromServer);
+                System.out.println("Г‘Г®Г®ГЎГ№ГҐГ­ГЁГҐ Г®ГІ Г±ГҐГ°ГўГҐГ°Г : " + inputFromServer);
             }
         } catch (IOException e) {
-            System.out.println("Ошибка при чтении с сервера: " + e.getMessage());
+            System.out.println("ГЋГёГЁГЎГЄГ  ГЇГ°ГЁ Г·ГІГҐГ­ГЁГЁ Г± Г±ГҐГ°ГўГҐГ°Г : " + e.getMessage());
         }
 
         try {
             serverSocket.close();
         } catch (IOException e) {
-            System.err.println("Ошибка при отключении от сервера " + e.getMessage());
+            System.err.println("ГЋГёГЁГЎГЄГ  ГЇГ°ГЁ Г®ГІГЄГ«ГѕГ·ГҐГ­ГЁГЁ Г®ГІ Г±ГҐГ°ГўГҐГ°Г  " + e.getMessage());
         }
 
     }
